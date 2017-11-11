@@ -7,11 +7,13 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class ServerOnClass {
 	
 	static ArrayList clients;
+	
 	
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, ClassNotFoundException
 	{
@@ -22,6 +24,7 @@ public class ServerOnClass {
 		System.out.println("TCP server is waiting on 5000");
 		
 		clients = new ArrayList();
+		
 		
 		while (true) {
 			Socket connect = server.accept();
@@ -35,13 +38,12 @@ public class ServerOnClass {
 	        }
 			
 			// client info:start
-			int portId = connect.getPort();
+			Integer portId = connect.getPort();
 			System.out.println("port "+portId);
 			int localPort = connect.getLocalPort();
 			System.out.println("localPort "+localPort);
 			InetAddress senderAddress = connect.getInetAddress();
-			System.out.println("senderAddress "+senderAddress);
-			
+			System.out.println("senderAddress "+senderAddress);			
 			
 			Random rand = new Random(); 
 			int send = rand.nextInt(50); 
@@ -51,7 +53,22 @@ public class ServerOnClass {
 			System.out.println("senderID "+senderID);
 			System.out.println("recieverID "+recieverID);
 			//client info :end
-			//Server.main("Connection Established");
+			
+			ArrayList registerInfo = new ArrayList();
+			registerInfo.add(portId);
+			registerInfo.add(senderAddress);
+			
+			//form a hashmap with senderID as key	
+			HashMap<String, ArrayList> registerInfoMap = new HashMap<String, ArrayList>();
+			if (!registerInfoMap.containsKey(senderID)){			
+			registerInfoMap.put(senderID, registerInfo);
+			}
+			
+		
+			for (HashMap.Entry entry : registerInfoMap.entrySet()) {
+			    System.out.println(entry.getKey() + ", " + entry.getValue());
+			}
+			
 			
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
 			keyGen.initialize(512);
