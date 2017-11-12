@@ -67,7 +67,7 @@ public class ServerOnClass {
 			//printing contents of map
 			System.out.println("Printing contents of map");
 			for (HashMap.Entry entry : registerInfoMap.entrySet()) {
-			    System.out.println(entry.getKey() + ", " + entry.getValue());
+			    System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
 			
 			
