@@ -13,6 +13,7 @@ import java.util.Random;
 public class ServerOnClass {
 	
 	static ArrayList clients;
+	static HashMap<String, ArrayList> registerInfoMap ;
 	
 	
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, ClassNotFoundException
@@ -24,6 +25,7 @@ public class ServerOnClass {
 		System.out.println("TCP server is waiting on 5000");
 		
 		clients = new ArrayList();
+		registerInfoMap = new HashMap<String, ArrayList>();
 		
 		
 		while (true) {
@@ -32,6 +34,7 @@ public class ServerOnClass {
 			System.out.println( ++numOfConnection);
 			clients.add(connect);
 			
+			//print each client's socket information (debugging purpose)
 			for (int i = 0; i < clients.size(); i++) {
 	            Object value = clients.get(i);
 	            System.out.println("Element: " + value.toString());
@@ -39,19 +42,17 @@ public class ServerOnClass {
 			
 			// client info:start
 			Integer portId = connect.getPort();
-			System.out.println("port "+portId);
+			//System.out.println("port "+portId);
 			int localPort = connect.getLocalPort();
-			System.out.println("localPort "+localPort);
+			//System.out.println("localPort "+localPort);
 			InetAddress senderAddress = connect.getInetAddress();
-			System.out.println("senderAddress "+senderAddress);			
+			//System.out.println("senderAddress "+senderAddress);			
 			
 			Random rand = new Random(); 
 			int send = rand.nextInt(50); 
 			String senderID = "client" + send;
 			int receive = rand.nextInt(50);
 			String recieverID = "client" + receive;
-			System.out.println("senderID "+senderID);
-			System.out.println("recieverID "+recieverID);
 			//client info :end
 			
 			ArrayList registerInfo = new ArrayList();
@@ -59,12 +60,12 @@ public class ServerOnClass {
 			registerInfo.add(senderAddress);
 			
 			//form a hashmap with senderID as key	
-			HashMap<String, ArrayList> registerInfoMap = new HashMap<String, ArrayList>();
 			if (!registerInfoMap.containsKey(senderID)){			
 			registerInfoMap.put(senderID, registerInfo);
 			}
 			
-		
+			//printing contents of map
+			System.out.println("Printing contents of map");
 			for (HashMap.Entry entry : registerInfoMap.entrySet()) {
 			    System.out.println(entry.getKey() + ", " + entry.getValue());
 			}
